@@ -1,0 +1,7 @@
+GENERAL DESCRIPTION
+--------------------
+The program receives 2 arguments file1 and file2. It creates 2 processes, the CHILD reads from file1 char by char and executes chartomorse() reciving a pointer to the MORSE WORD. Afterwards, the CHILD executes sendsignals() which sends combination of SIGUSR1 and SIGUSR2 and SIGALRM according to the recieved MORSE WORD. 
+
+In parallel, the PARENT adds every received signal to a vector building a MORSEWORD using the signaltomorse() function. When SIGALARM is recieved the PARENT executes morsetochar() function and gets the equivalent char to the MORSEWORD received. Finally it writes it to file2. When CHILD gets EOF from file1 it sends SIGINT to the PARENT and both close.
+
+Communication among PARENT and CHILD is controlled by a pipe that blocks de CHILD until PARENT has processed all pending signals. In order to avoid race conditions, another pipe is used to buffer signals.
